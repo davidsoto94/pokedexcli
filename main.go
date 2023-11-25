@@ -15,9 +15,12 @@ func cleanInput(text string) []string {
 
 func main() {
 	reader := bufio.NewScanner(os.Stdin)
-
+	cfg := config{
+		next:     "",
+		previous: nil,
+	}
 	for {
-		fmt.Print("pokedexcli>")
+		fmt.Print("pokedexcli >")
 		reader.Scan()
 		text := cleanInput(reader.Text())
 		if len(text) == 0 {
@@ -28,7 +31,7 @@ func main() {
 			fmt.Println(text, ": command not found")
 			continue
 		}
-		err := command.callback()
+		err := command.callback(&cfg)
 		if err != nil {
 			fmt.Println(err)
 		}

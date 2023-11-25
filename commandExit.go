@@ -1,9 +1,8 @@
 package main
 
-import (
-	"errors"
-)
+import "os"
 
-func commandExit() error {
-	return errors.New("Try error")
+func commandExit(cfg *config) error {
+	os.Exit(0)
+	return nil
 }
