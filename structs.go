@@ -1,5 +1,7 @@
 package main
 
+import "github.com/davidsoto94/pokedexcli/internal/pokecache"
+
 type Response struct {
 	Count    int     `json:"count"`
 	Next     string  `json:"next"`
@@ -19,4 +21,5 @@ type cliCommand struct {
 type config struct {
 	next     string
 	previous *string
+	cache    pokecache.Cache
 }

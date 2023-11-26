@@ -6,7 +6,10 @@ import (
 )
 
 func commandMap(config *config) error {
-	res, err := getNextLocations(config.next)
+	if config.next == "" {
+		config.next = "https://pokeapi.co/api/v2/location-area/"
+	}
+	res, err := getLocations(config.next, config.cache)
 	if err != nil {
 		return err
 	}
@@ -22,7 +25,7 @@ func commandMapb(config *config) error {
 	if config.previous == nil {
 		return errors.New("Can't go back")
 	}
-	res, err := getPreviousLocations(*config.previous)
+	res, err := getLocations(*config.previous, config.cache)
 	if err != nil {
 		return err
 	}

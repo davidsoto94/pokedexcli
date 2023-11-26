@@ -6,33 +6,24 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/davidsoto94/pokedexcli/internal/pokecache"
 )
 
-func getNextLocations(next string) (Response, error) {
-	if next == "" {
-		next = "https://pokeapi.co/api/v2/location-area/"
-	}
-	body, err := handleRequests(next)
-	if err != nil {
-		return Response{}, err
-	}
+func getLocations(uri string, c pokecache.Cache) (Response, error) {
 	reponse := Response{}
-	err = json.Unmarshal(body, &reponse)
+	res, ok := c.Get(uri)
+	if !ok {
+		body, err := handleRequests(uri)
+		if err != nil {
+			return Response{}, err
+		}
+		c.Add(uri, body)
+		res = body
+	}
+	err := json.Unmarshal(res, &reponse)
 	if err != nil {
 		return Response{}, err
-	}
-	return reponse, nil
-}
-
-func getPreviousLocations(previous string) (Response, error) {
-	body, err := handleRequests(previous)
-	if err != nil {
-		return Response{}, err
-	}
-	reponse := Response{}
-	err = json.Unmarshal(body, &reponse)
-	if err != nil {
-		return Response{}, errors.New(err.Error())
 	}
 	return reponse, nil
 }

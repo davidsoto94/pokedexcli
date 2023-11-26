@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/davidsoto94/pokedexcli/internal/pokecache"
 )
 
 func cleanInput(text string) []string {
@@ -18,6 +21,7 @@ func main() {
 	cfg := config{
 		next:     "",
 		previous: nil,
+		cache:    pokecache.NewCache(5 * time.Minute),
 	}
 	for {
 		fmt.Print("pokedexcli >")
