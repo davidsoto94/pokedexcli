@@ -10,20 +10,20 @@ import (
 	"github.com/davidsoto94/pokedexcli/internal/pokecache"
 )
 
-func getLocations(uri string, c pokecache.Cache) (Response, error) {
-	reponse := Response{}
+func getLocations[T LocationsResponse | PokemonsInLocation](uri string, c pokecache.Cache) (T, error) {
+	var reponse T
 	res, ok := c.Get(uri)
 	if !ok {
 		body, err := handleRequests(uri)
 		if err != nil {
-			return Response{}, err
+			return reponse, err
 		}
 		c.Add(uri, body)
 		res = body
 	}
 	err := json.Unmarshal(res, &reponse)
 	if err != nil {
-		return Response{}, err
+		return reponse, err
 	}
 	return reponse, nil
 }

@@ -19,12 +19,14 @@ func cleanInput(text string) []string {
 func main() {
 	reader := bufio.NewScanner(os.Stdin)
 	cfg := config{
+		baseUrl:  "https://pokeapi.co/api/v2",
 		next:     "",
 		previous: nil,
+		param1:   "",
 		cache:    pokecache.NewCache(5 * time.Minute),
 	}
 	for {
-		fmt.Print("pokedexcli >")
+		fmt.Print("Pokedex >")
 		reader.Scan()
 		text := cleanInput(reader.Text())
 		if len(text) == 0 {
@@ -34,6 +36,11 @@ func main() {
 		if !ok {
 			fmt.Println(text, ": command not found")
 			continue
+		}
+		if len(text) > 1 {
+			cfg.param1 = text[1]
+		} else {
+			cfg.param1 = ""
 		}
 		err := command.callback(&cfg)
 		if err != nil {
