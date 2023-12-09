@@ -27,7 +27,7 @@ func main() {
 		cache:           pokecache.NewCache(5 * time.Minute),
 	}
 	for {
-		fmt.Print("Pokedex >")
+		fmt.Print("Pokedex > ")
 		reader.Scan()
 		text := cleanInput(reader.Text())
 		if len(text) == 0 {
