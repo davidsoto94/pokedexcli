@@ -30,6 +30,7 @@ func commandCatch(cfg *config) error {
 		return nil
 	}
 	fmt.Printf("%s was caught!\n", pokemon.Name)
+	fmt.Println("You may now inspect it with the inspect command.")
 	if cfg.caughtPokemon == nil {
 		cfg.caughtPokemon = map[string]Pokemon{}
 	}
