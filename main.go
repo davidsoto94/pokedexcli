@@ -19,11 +19,12 @@ func cleanInput(text string) []string {
 func main() {
 	reader := bufio.NewScanner(os.Stdin)
 	cfg := config{
-		baseUrl:  "https://pokeapi.co/api/v2",
-		next:     "",
-		previous: nil,
-		param1:   "",
-		cache:    pokecache.NewCache(5 * time.Minute),
+		baseUrl:         "https://pokeapi.co/api/v2",
+		next:            "",
+		previous:        nil,
+		param1:          "",
+		currentPokemons: nil,
+		cache:           pokecache.NewCache(5 * time.Minute),
 	}
 	for {
 		fmt.Print("Pokedex >")

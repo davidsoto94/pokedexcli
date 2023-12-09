@@ -23,7 +23,7 @@ func commandMap(config *config) error {
 
 func commandMapb(config *config) error {
 	if config.previous == nil {
-		return errors.New("Can't go back")
+		return errors.New("can't go back")
 	}
 	res, err := getLocations[LocationsResponse](*config.previous, config.cache)
 	if err != nil {

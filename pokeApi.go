@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,22 +9,40 @@ import (
 	"github.com/davidsoto94/pokedexcli/internal/pokecache"
 )
 
-func getLocations[T LocationsResponse | PokemonsInLocation](uri string, c pokecache.Cache) (T, error) {
-	var reponse T
+func getPokemon(name, uri string, c pokecache.Cache) (Pokemon, error) {
+	var response Pokemon
 	res, ok := c.Get(uri)
 	if !ok {
 		body, err := handleRequests(uri)
 		if err != nil {
-			return reponse, err
+			return response, err
 		}
 		c.Add(uri, body)
 		res = body
 	}
-	err := json.Unmarshal(res, &reponse)
+	err := json.Unmarshal(res, &response)
 	if err != nil {
-		return reponse, err
+		return response, err
 	}
-	return reponse, nil
+	return response, nil
+}
+
+func getLocations[T LocationsResponse | PokemonsInLocation](uri string, c pokecache.Cache) (T, error) {
+	var response T
+	res, ok := c.Get(uri)
+	if !ok {
+		body, err := handleRequests(uri)
+		if err != nil {
+			return response, err
+		}
+		c.Add(uri, body)
+		res = body
+	}
+	err := json.Unmarshal(res, &response)
+	if err != nil {
+		return response, err
+	}
+	return response, nil
 }
 
 func handleRequests(param string) ([]byte, error) {
@@ -36,7 +53,7 @@ func handleRequests(param string) ([]byte, error) {
 	body, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if res.StatusCode > 299 {
-		return nil, errors.New(fmt.Sprintf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body))
+		return nil, fmt.Errorf("response failed with status code: %d and\nbody: %s", res.StatusCode, body)
 	}
 	if err != nil {
 		return nil, err
